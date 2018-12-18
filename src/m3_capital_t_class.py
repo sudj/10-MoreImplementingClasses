@@ -3,8 +3,8 @@ A   CapitalT   class and functions that use/test it.
 
 Authors: David Mutchler, Vibha Alangar, Matt Boutell, Dave Fisher,
          Mark Hays, Amanda Stouder, Aaron Wilkin, their colleagues,
-         and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         and Daniel Su.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 
@@ -23,7 +23,7 @@ def main():
     # run_test_simple_t()
     # run_test_set_colors()
     # run_test_move_by()
-    # run_test_clone()
+    run_test_clone()
 
 
 def run_test_simple_t():
@@ -162,7 +162,7 @@ class CapitalT(object):
           :type letter_thickness:    int
         """
         # ---------------------------------------------------------------------
-        # TODO: 3.
+        # DONE: 3.
         #   READ the above specification, including the Example.
         #   Implement this method, using the instance variables
         #      h_rect
@@ -170,6 +170,18 @@ class CapitalT(object):
         #   and *** NO OTHER INSTANCE VARIABLES. ***
         #   Note: Implement   attach_to   before testing this __init__ method.
         # ---------------------------------------------------------------------
+        h_upperleftx = intersection_center.x - width/2
+        h_upperlefty = intersection_center.y - letter_thickness/2
+        h_lowerrightx = intersection_center.x + width/2
+        h_lowerrighty = intersection_center.y + letter_thickness/2
+        self.h_rect = rg.Rectangle(rg.Point(h_upperleftx, h_upperlefty), rg.Point(h_lowerrightx, h_lowerrighty))
+        v_upperleftx = intersection_center.x - letter_thickness/2
+        v_upperlefty = intersection_center.y - letter_thickness/2
+        v_lowerrightx = intersection_center.x + letter_thickness/2
+        v_lowerrighty = intersection_center.y + height - letter_thickness/2
+        self.v_rect = rg.Rectangle(rg.Point(v_upperleftx, v_upperlefty), rg.Point(v_lowerrightx, v_lowerrighty))
+
+
 
     def attach_to(self, window):
         """
@@ -190,7 +202,7 @@ class CapitalT(object):
           :type window: rg.RoseWindow
         """
         # ---------------------------------------------------------------------
-        # TODO: 4.
+        # DONE: 4.
         #   READ the above specification, including the Example.
         #   Implement this method, then TEST it by:
         #     a. Un-comment the call to its test function, in main.  Run.
@@ -198,6 +210,8 @@ class CapitalT(object):
         #     c. Compare the graphics window to the   simple_t.pdf   pictures.
         #        They should look exactly the same as each other.
         # ---------------------------------------------------------------------
+        self.v_rect.attach_to(window)
+        self.h_rect.attach_to(window)
 
     def set_colors(self, fill_color, outline_color):
         """
@@ -222,7 +236,7 @@ class CapitalT(object):
           :type outline_color: str
         """
         # ---------------------------------------------------------------------
-        # TODO: 5.
+        # DONE: 5.
         #   READ the above specification, including the Example.
         #   Implement this method, then TEST it by:
         #     a. Un-comment the call to its test function, in main.  Run.
@@ -230,6 +244,10 @@ class CapitalT(object):
         #     c. Compare the graphics window to the  set_colors.pdf   pictures.
         #        They should look exactly the same as each other.
         # ---------------------------------------------------------------------
+        self.v_rect.fill_color = fill_color
+        self.h_rect.fill_color = fill_color
+        self.h_rect.outline_color = outline_color
+        self.v_rect.outline_color = outline_color
 
     def move_by(self, dx, dy):
         """
@@ -255,7 +273,7 @@ class CapitalT(object):
           :type dy: int
         """
         # ---------------------------------------------------------------------
-        # TODO: 6.
+        # DONE: 6.
         #   READ the above specification, including the Example.
         #   Implement this method, then TEST it by:
         #     a. Un-comment the call to its test function, in main.  Run.
@@ -266,6 +284,14 @@ class CapitalT(object):
         #        Note: the pdf shows the different locations that
         #        the T moves through, but there is only one T at any moment.
         # ---------------------------------------------------------------------
+        self.v_rect.corner_1.x = self.v_rect.corner_1.x + dx
+        self.v_rect.corner_1.y = self.v_rect.corner_1.y + dy
+        self.v_rect.corner_2.x = self.v_rect.corner_2.x + dx
+        self.v_rect.corner_2.y = self.v_rect.corner_2.y + dy
+        self.h_rect.corner_1.x = self.h_rect.corner_1.x + dx
+        self.h_rect.corner_1.y = self.h_rect.corner_1.y + dy
+        self.h_rect.corner_2.x = self.h_rect.corner_2.x + dx
+        self.h_rect.corner_2.y = self.h_rect.corner_2.y + dy
 
     def clone(self):
         """
@@ -288,7 +314,7 @@ class CapitalT(object):
           :rtype: CapitalT
         """
         # ---------------------------------------------------------------------
-        # TODO: 7.
+        # DONE: 7.
         #   READ the above specification, including the Example.
         #   Implement this method, then TEST it by:
         #     a. Un-comment the call to its test function, in main.  Run.
@@ -300,6 +326,21 @@ class CapitalT(object):
         # IMPORTANT RESTRICTION: You are NOT permitted to add any instance
         # variables beyond  h_rect  and  v_rect, at any point of this exercise.
         #######################################################################
+        fill = self.v_rect.fill_color
+        outline = self.v_rect.outline_color
+        centerx = (self.h_rect.corner_1.x + self.h_rect.corner_2.x)/2
+        centery = (self.h_rect.corner_1.y + self.h_rect.corner_2.y)/2
+        length = self.h_rect.corner_2.x - self.h_rect.corner_1.x
+        tall = self.v_rect.corner_2.y - self.v_rect.corner_1.y
+        thick = self.h_rect.corner_2.y - self.h_rect.corner_1.y
+
+        t = CapitalT(rg.Point(centerx, centery), length, tall, thick)
+        t.set_colors(fill, outline)
+
+
+        return t
+
+
 
 
 # -----------------------------------------------------------------------------
